@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haunted Carnival - The Loop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+        body {
+            font-family: 'Creepster', cursive;
+            background: black;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #game-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 20px;
+            cursor: pointer;
+            font-family: 'Creepster', cursive;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: darkred;
+        }
+        .game-box {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border: 2px solid red;
+            width: 60%;
+            margin: 20px auto;
+        }
+        .ring-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .bottle {
+            width: 50px;
+            height: 100px;
+            background: darkred;
+            border-radius: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="intro-scene" class="game-box">
+            <h1>Welcome to the Haunted Carnival</h1>
+            <p>You and your four friends step into the abandoned carnival...</p>
+            <p>The gate slams shut behind you.</p>
+            <p>A distorted voice echoes: <br> <em>"Welcome to the game. Play to stay. Win to escape."</em></p>
+            <button id="start-btn">Continue</button>
+        </div>
+
+        <div id="ring-toss-game" class="game-box hidden">
+            <h2>🎪 Rigged Ring Toss 🎪</h2>
+            <p>Try to land the ring onto the bottle... but something feels off.</p>
+            <div class="ring-container">
+                <div class="bottle" id="bottle1"></div>
+                <div class="bottle" id="bottle2"></div>
+                <div class="bottle" id="bottle3"></div>
+            </div>
+            <button id="throw-ring">Throw Ring</button>
+        </div>
+
+        <div id="fortune-teller-game" class="game-box hidden">
+            <h2>🔮 The Fortune Teller 🔮</h2>
+            <p>A glitching fortune teller whispers: <br><em>"Choose wisely, or be cursed forever..."</em></p>
+            <button class="fortune-choice" data-choice="wrong">"The Past Holds the Key"</button>
+            <button class="fortune-choice" data-choice="right">"A Friend is Not What They Seem"</button>
+            <button class="fortune-choice" data-choice="wrong">"Leave Before the Moon Rises"</button>
+        </div>
+
+        <div id="door-game" class="game-box hidden">
+            <h2>🚪 Three Doors Stand Before You 🚪</h2>
+            <p>Each door whispers something different. Choose wisely...</p>
+            <button class="door-choice" data-choice="wrong">Left Door: "Your friends are waiting for you."</button>
+            <button class="door-choice" data-choice="right">Middle Door: "This is the only way out."</button>
+            <button class="door-choice" data-choice="wrong">Right Door: "Stay here. It's safer."</button>
+        </div>
+
+        <div id="message-box" class="game-box hidden">
+            <p id="message-text"></p>
+            <button id="restart-btn">Restart the Nightmare</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let introScene = document.getElementById("intro-scene");
+            let startBtn = document.getElementById("start-btn");
+            let ringTossGame = document.getElementById("ring-toss-game");
+            let fortuneTellerGame = document.getElementById("fortune-teller-game");
+            let doorGame = document.getElementById("door-game");
+            let messageBox = document.getElementById("message-box");
+            let messageText = document.getElementById("message-text");
+            let restartBtn = document.getElementById("restart-btn");
+            let throwRingBtn = document.getElementById("throw-ring");
+            let fortuneChoices = document.querySelectorAll(".fortune-choice");
+            let doorChoices = document.querySelectorAll(".door-choice");
+
+            startBtn.addEventListener("click", function () {
+                introScene.classList.add("hidden");
+                ringTossGame.classList.remove("hidden");
+            });
+
+            throwRingBtn.addEventListener("click", function () {
+                let success = Math.random() < 0.4;
+                if (success) {
+                    ringTossGame.classList.add("hidden");
+                    fortuneTellerGame.classList.remove("hidden");
+                } else {
+                    messageText.textContent = "The bottles move! You missed. The loop resets...";
+                    ringTossGame.classList.add("hidden");
+                    messageBox.classList.remove("hidden");
+                }
+            });
+
+            fortuneChoices.forEach(button => {
+                button.addEventListener("click", function () {
+                    if (button.getAttribute("data-choice") === "right") {
+                        fortuneTellerGame.classList.add("hidden");
+                        doorGame.classList.remove("hidden");
+                    } else {
+                        messageText.textContent = "The fortune teller laughs. You chose wrong. The loop resets...";
+                        fortuneTellerGame.classList.add("hidden");
+                        messageBox.classList.remove("hidden");
+                    }
+                });
+            });
+
+            doorChoices.forEach(button => {
+                button.addEventListener("click", function () {
+                    if (button.getAttribute("data-choice") === "right") {
+                        window.location.href = "https://www.youtube.com/watch?v=xvFZjo5PgG0"; // Rickroll video
+                    } else {
+                        messageText.textContent = "The wrong door opens into darkness. The loop resets...";
+                        doorGame.classList.add("hidden");
+                        messageBox.classList.remove("hidden");
+                    }
+                });
+            });
+
+            restartBtn.addEventListener("click", function () {
+                location.reload();
+            });
+        });
+    </script>
+
+</body>
+</html>
